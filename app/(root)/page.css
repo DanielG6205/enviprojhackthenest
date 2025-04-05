@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff; 
+    color: #356E48;
+  }
+
+  .about{
+    color: #356E48;
+    border: 2px solid #356E48;
+    border-radius: 10px;
+    left: 10px;
+    width: 70%;
+    text-align: center;
+  }
+
+
+  .h2_a{
+    font-size: 30px;
+  }
+  
+  .homepage {
+    text-align: center;
+  }
+  
+  .hero {
+    background: url('https://example.com/snowy-bg.jpg') no-repeat center center/cover;
+    padding: 50px 20px;
+  }
+  
+  .hero-content .title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+  .hero-content .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .cta-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #cc0000;
+  }
+  
+  .decorations {
+    background-color: #fff;
+    padding: 30px 20px;
+  }
+  
+  .decorations h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .decoration-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .decoration-item {
+    background-color: #ffebcd; 
+    padding: 15px 20px;
+    border: 2px solid #ff4d4d;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    font-size: 0.9rem;
+  }
+  
+
+  .rotating-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .gallery-image {
+    width: 300px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .image-caption {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #356E48;
+    text-align: center;
+  }
+  
+  
