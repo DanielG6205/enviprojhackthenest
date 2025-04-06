@@ -1,13 +1,17 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});const cors = require('cors');
+app.use(cors());
 
 const locations = [
   {
     name: 'Great Barrier Reef, Australia',
     beforeImageUrl: 'https://example.com/before-great-barrier-reef.jpg',
     afterImageUrl: 'https://example.com/after-great-barrier-reef.jpg',
-    center: [18.2871, 147.6992], // existing center
+    center: [18.2871, 147.6992],
     facts: [
       'Coral bleaching has affected 60% of the reef.',
       'Ocean warming is the primary cause of coral death.',
@@ -17,7 +21,7 @@ const locations = [
     name: 'Amazon Rainforest, Brazil',
     beforeImageUrl: 'https://example.com/before-amazon.jpg',
     afterImageUrl: 'https://example.com/after-amazon.jpg',
-    center: [-3.4653, -62.2159], // existing center
+    center: [-3.4653, -62.2159],
     facts: [
       'Over 17% of the Amazon rainforest has been destroyed in the past 50 years.',
       'Deforestation is a leading cause of habitat loss for many species.',
@@ -28,10 +32,9 @@ const locations = [
 app.get('/get-random-location', (req, res) => {
   const randomLocation = locations[Math.floor(Math.random() * locations.length)];
 
-  // Add a 'coords' field to match the frontend expectation
   const response = {
     ...randomLocation,
-    coords: randomLocation.center, // Rename 'center' to 'coords'
+    coords: randomLocation.center,
   };
 
   res.json(response);
