@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next dev",
-    "start-backend": "cd C:\"Users\"devon\".vscode\"htn\"enviprojhackthenest\"eco-guessr-api && node server.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run start-backend\""  
+    "dev": "next dev --turbopack",
+    "dev:api": "node eco-guessr-api/server.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\"" 
   },
   "keywords": [],
   "author": "",

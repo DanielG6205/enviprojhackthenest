@@ -1,29 +1,41 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+type LatLngExpression = [number, number] | { lat: number; lng: number };
+import { useMapEvents } from 'react-leaflet'; // ✅ normal import here
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';  // Import Leaflet
 
-// Dynamically import MapContainer and related Leaflet components to avoid SSR issues
-const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+// Dynamically import only SSR-sensitive components
+const MapContainer = dynamic(
+  () => import('react-leaflet').then(mod => mod.MapContainer),
+  { ssr: false }
+) as React.FC<{
+  center: LatLngExpression;
+  zoom: number;
+  style: React.CSSProperties;
+  children: React.ReactNode;
+}>;
+
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
 const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
+
+let L: any;
+if (typeof window !== 'undefined') {
+  L = require('leaflet');
+  delete L.Icon.Default.prototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  });
+}
 
 type LatLng = {
   lat: number;
   lng: number;
 };
-
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 type LocationData = {
   name: string;
@@ -33,18 +45,6 @@ type LocationData = {
   coords: [number, number];
   center: [number, number];
 };
-
-function MapCenterSetter({ coords }: { coords: [number, number] }) {
-  const mapRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.setView(coords, mapRef.current.getZoom());
-    }
-  }, [coords]);
-
-  return null;
-}
 
 export default function PlayPage() {
   const [location, setLocation] = useState<LocationData | null>(null);
@@ -80,34 +80,35 @@ export default function PlayPage() {
 
   const handleSubmit = () => {
     if (guessCoords && location) {
-      // Calculate distance in miles (using Haversine formula or similar)
       const distance = calculateDistance(
         guessCoords[0],
         guessCoords[1],
         location.coords[0],
         location.coords[1]
       );
-      setScore(score + distance); // Update the score based on the distance (adjust logic as needed)
+      setScore(score + distance);
       setShowAnswer(true);
     }
   };
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 6371; // Radius of Earth in km
+    const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
     const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c * 0.621371; // Return distance in miles
+    return R * c * 0.621371; // miles
   };
 
   const handleNext = () => {
     setRound(round + 1);
     setShowAnswer(false);
     setGuessCoords(null);
+    fetchLocation();
   };
 
   const handleEnd = () => {
@@ -137,11 +138,14 @@ export default function PlayPage() {
           {!showAnswer ? (
             <>
               <p>Click on the map to make your guess!</p>
-              <MapContainer style={{ height: '400px', width: '100%', margin: '20px 0' }}>
+              <MapContainer
+                center={location.center}
+                zoom={3}
+                style={{ height: '400px', width: '100%', margin: '20px 0', backgroundColor: 'lightgray' }}
+              >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <MapCenterSetter coords={location.center} />
                 <GuessMarker onGuess={(latlng) => setGuessCoords([latlng.lat, latlng.lng])} />
-                {guessCoords && <Marker position={guessCoords} />}
+                {guessCoords && <Marker position={guessCoords}><Popup>Your guess</Popup></Marker>}
               </MapContainer>
               <button onClick={handleSubmit} disabled={!guessCoords}>
                 Submit Guess
@@ -150,11 +154,10 @@ export default function PlayPage() {
           ) : (
             <>
               <h2>Correct Location: {location.name}</h2>
-              <MapContainer style={{ height: '400px', width: '100%', margin: '20px 0' }}>
+              <MapContainer center={location.coords} zoom={3} style={{ height: '400px', width: '100%', margin: '20px 0' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <MapCenterSetter coords={location.coords} />
-                <Marker position={location.coords} />
-                {guessCoords && <Marker position={guessCoords} />}
+                <Marker position={location.coords}><Popup>Correct Location</Popup></Marker>
+                {guessCoords && <Marker position={guessCoords}><Popup>Your guess</Popup></Marker>}
               </MapContainer>
               <img
                 src={location.afterImageUrl}
@@ -176,9 +179,9 @@ export default function PlayPage() {
       ) : (
         <>
           <h2>Game Over!</h2>
-          <h3>Your Score: {score} miles</h3>
+          <h3>Your Score: {score.toFixed(2)} miles</h3>
           <button onClick={handleEnd} style={{ marginTop: '20px' }}>
-            End Game
+            Restart Game
           </button>
         </>
       )}
@@ -186,25 +189,12 @@ export default function PlayPage() {
   );
 }
 
-// Event Handler for Guessing the Location
 function GuessMarker({ onGuess }: { onGuess: (latlng: LatLng) => void }) {
-  const mapRef = useRef<any>(null);  // Store map reference
-
-  useEffect(() => {
-    if (mapRef.current) {
-      const handleClick = (e: any) => {
-        onGuess(e.latlng);
-      };
-
-      mapRef.current.on('click', handleClick);
-      
-      return () => {
-        if (mapRef.current) {
-          mapRef.current.off('click', handleClick);
-        }
-      };
-    }
-  }, [mapRef, onGuess]);
+  useMapEvents({
+    click(e: { latlng: LatLng }) {
+      onGuess(e.latlng);
+    },
+  });
 
   return null;
 }
