@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <div className="footer-left">
           <h2 className="footer-title">EcoGuessr</h2>
           <p className="footer-description">
-            Learn about protecting the enviroment while learning about geography!
+            Learn about protecting the enviroment while having fun with geography!
           </p>
         </div>
         <div className="footer-links">
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} EcuGuessr. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} EcoGuessr. All rights reserved.</p>
       </div>
     </footer>
   );

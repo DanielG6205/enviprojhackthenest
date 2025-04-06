@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Santa's Karma Kids",
-  description: "Does Santa know if kids are naughty? Find out if you are!",
+  title: "EcoGuessr",
+  description: "Want to have fun with geography and learn about the environment? Play EcoGuessr!",
 };
 
 export default function RootLayout({

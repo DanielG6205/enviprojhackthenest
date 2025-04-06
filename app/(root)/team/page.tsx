@@ -12,20 +12,20 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Leo Shi',
     role: 'Page Developer',
-    image: '',
-    bio: 'Leo is the goat'
+    image: 'https://png.pngtree.com/png-clipart/20240721/original/pngtree-the-white-goat-standing-alone-png-image_15607029.png',
+    bio: 'Leo is the goat',
   },
   {
-    name: 'Devon Patel Rajesh',
+    name: 'Devon Parikh',
     role: 'Page Developer',
-    image: 'Leo.webp',
-    bio: 'Devon is the Goat.',
+    image: 'https://i1.sndcdn.com/artworks-000611542048-fpf9c7-t500x500.jpg',
+    bio: 'Devon is the goat',
   },
   {
     name: 'Daniel Gao',
-    role: 'Page Development',
-    image: '',
-    bio: 'Daniel is the goat',
+    role: 'Page Developer',
+    image: 'https://www.telegraph.co.uk/multimedia/archive/01651/Mr_Li_1651123f.jpg',
+    bio: 'Daniel did nothing',
   },
 ];
 
