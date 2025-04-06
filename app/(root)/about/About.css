@@ -1,6 +1,5 @@
-/* About.css */
 .header {
-  background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Green gradient background */
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
   color: white;
   padding: 50px 20px;
   text-align: center;
@@ -28,7 +27,7 @@
   font-size: 1.1rem;
   margin: 20px 0;
   line-height: 1.6;
-  color: #333; /* Dark gray text for better readability */
+  color: #333;
 }
 
 .content {
@@ -42,7 +41,7 @@
 }
 
 .content:hover {
-  transform: scale(1.02); /* Slight hover effect */
+  transform: scale(1.02);
 }
 
 .button {

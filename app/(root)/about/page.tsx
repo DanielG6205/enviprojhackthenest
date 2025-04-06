@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from "next/image";
-import './About.css'; // Import the updated CSS
+import './About.css';
 
 const About: React.FC = () => {
   return (

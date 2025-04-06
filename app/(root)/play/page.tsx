@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 type LatLngExpression = [number, number] | { lat: number; lng: number };
-import { useMapEvents } from 'react-leaflet'; // ✅ normal import here
+import { useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Dynamically import only SSR-sensitive components
 const MapContainer = dynamic(
   () => import('react-leaflet').then(mod => mod.MapContainer),
   { ssr: false }

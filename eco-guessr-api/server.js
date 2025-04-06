@@ -164,7 +164,7 @@ const locations = [
       
       const response = {
       ...randomLocation,
-      coords: randomLocation.center,
+      coords: randomLocation.coords,
       };
       
       res.json(response);
